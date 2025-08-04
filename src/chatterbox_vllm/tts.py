@@ -150,7 +150,7 @@ class ChatterboxTTS:
         print(f"Linking {model_safetensors_path=} to {t3_cfg_path=}")
         model_safetensors_path.symlink_to(t3_cfg_path)
         print(f"{local_path=}")
-        return cls.from_local(Path(local_path).parent, *args, **kwargs)
+        return cls.from_local(str(Path(local_path).parent), *args, **kwargs)
 
     @lru_cache(maxsize=10)
     def get_audio_conditionals(self, wav_fpath: Optional[str] = None) -> Conditionals:
