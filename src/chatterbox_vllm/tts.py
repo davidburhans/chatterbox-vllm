@@ -113,16 +113,16 @@ class ChatterboxTTS:
         ckpt_dir = Path(ckpt_dir)
         
         ve = VoiceEncoder()
-        print(f"loading {ckpt_dir / "ve.safetensors"}")
+        print(f"loading {ckpt_dir}/ve.safetensors")
         ve.load_state_dict(load_file(ckpt_dir / "ve.safetensors"))
         ve.eval()
 
         s3gen = S3Gen()
-        print(f"loading {ckpt_dir / "s3gen.safetensors"}")
+        print(f"loading {ckpt_dir}/s3gen.safetensors")
         s3gen.load_state_dict(load_file(ckpt_dir / "s3gen.safetensors"), strict=False)
         s3gen.to(device="cuda").eval()
 
-        print(f"loading {ckpt_dir / "conds.pt"}")
+        print(f"loading {ckpt_dir}/conds.pt")
         default_conds = Conditionals.load(ckpt_dir / "conds.pt")
         default_conds.to(device="cuda")
         
