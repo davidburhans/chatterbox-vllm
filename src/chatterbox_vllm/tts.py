@@ -125,9 +125,9 @@ class ChatterboxTTS:
         print(f"loading {ckpt_dir}/conds.pt")
         default_conds = Conditionals.load(ckpt_dir / "conds.pt")
         default_conds.to(device="cuda")
-        
+        print(f"loading llm from {str(Path.cwd() / "t3-model")}")
         t3 = LLM(
-            model=Path.cwd() / "t3-model",
+            model=str(Path.cwd() / "t3-model"),
             task="generate",
             tokenizer="EnTokenizer",
             tokenizer_mode="custom",
