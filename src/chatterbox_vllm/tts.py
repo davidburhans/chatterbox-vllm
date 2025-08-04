@@ -111,20 +111,23 @@ class ChatterboxTTS:
     @classmethod
     def from_local(cls, ckpt_dir: str, **kwargs) -> 'ChatterboxTTS':
         ckpt_dir = Path(ckpt_dir)
-
+        
         ve = VoiceEncoder()
+        print(f"loading {ckpt_dir / "ve.safetensors"}")
         ve.load_state_dict(load_file(ckpt_dir / "ve.safetensors"))
         ve.eval()
 
         s3gen = S3Gen()
+        print(f"loading {ckpt_dir / "s3gen.safetensors"}")
         s3gen.load_state_dict(load_file(ckpt_dir / "s3gen.safetensors"), strict=False)
         s3gen.to(device="cuda").eval()
 
+        print(f"loading {ckpt_dir / "conds.pt"}")
         default_conds = Conditionals.load(ckpt_dir / "conds.pt")
         default_conds.to(device="cuda")
-
+        
         t3 = LLM(
-            model=f"./t3-model",
+            model=Path.cwd() / t3-model,
             task="generate",
             tokenizer="EnTokenizer",
             tokenizer_mode="custom",
@@ -144,8 +147,9 @@ class ChatterboxTTS:
         t3_cfg_path = Path(local_path).parent / "t3_cfg.safetensors"
         model_safetensors_path = Path.cwd() / "t3-model" / "model.safetensors"
         model_safetensors_path.unlink(missing_ok=True)
+        print(f"Linking {model_safetensors_path=} to {t3_cfg_path=}")
         model_safetensors_path.symlink_to(t3_cfg_path)
-        print(f"{t3_cfg_path=}\n{local_path=}")
+        print(f"{local_path=}")
         return cls.from_local(Path(local_path).parent, *args, **kwargs)
 
     @lru_cache(maxsize=10)
