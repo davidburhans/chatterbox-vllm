@@ -127,7 +127,7 @@ class ChatterboxTTS:
         default_conds.to(device="cuda")
         
         t3 = LLM(
-            model=Path.cwd() / t3-model,
+            model=Path.cwd() / "t3-model",
             task="generate",
             tokenizer="EnTokenizer",
             tokenizer_mode="custom",
